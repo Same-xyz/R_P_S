@@ -1,6 +1,6 @@
 function getComputerChoice(){ //Function to generate random
     const random = Math.floor(Math.random() * 3);//Generates a number beetween 0 and 2
-    return random === 0 ? "Rock": random === 1 ? "Paper": "Scissors";
+    return random === 0 ? "rock": random === 1 ? "paper": "scissors";
 }
 
 function capitalize(str){
@@ -9,7 +9,11 @@ function capitalize(str){
 
  function getHumanChoice() {
     let humanChoice = prompt("Enter Rock, Paper or Scissors ?");
-    humanChoice = humanChoice ? humanChoice.toLowerCase(): "";
+    if (humanChoice === null) {
+        console.log("Prompt canceled. Exiting the game.");
+        return null; // Handle this null case in the game logic to exit
+    }
+    humanChoice = humanChoice.toLowerCase(); ;
     if (humanChoice === "rock" || humanChoice === "paper" || humanChoice === "scissors" ){
         console.log(`You chose: ${capitalize(humanChoice)}`);
         return humanChoice;
@@ -19,14 +23,12 @@ function capitalize(str){
     }
 }
 
-const choice = getHumanChoice();
-console.log(`Your choice is : ${capitalize(choice)}`);
-
 let humanScore = 0;
 let computerScore = 0;
 
 //Function that takes in human and computerchoices as arguments
 function playRound(humanChoice, computerChoice) {
+    if (!humanChoice) return; // Exit the round if the human choice is null
     humanChoice = humanChoice.toLowerCase();
 // Draw/tie Condition
     if (humanChoice === computerChoice){
@@ -44,34 +46,35 @@ function playRound(humanChoice, computerChoice) {
         humanScore++;
     }
     //Computer Win Condition
-    else if(
-        (computerChoice === 'rock' && humanChoice === 'scissors') ||
-        (computerChoice === 'paper' && humanChoice === 'rock') ||
-        (computerChoice === 'scissors' && humanChoice === 'paper')
-    ){
+    else{
     alert(`You lose, Computer plays ${computerChoice} which beats ${humanChoice}`);
     console.log(`Computer wins, computer plays ${computerChoice}`);
-    computerScore++;
-} else{
-    console.log("Invalid choice. Please chose between Rock, Paper, or Scissors. ");
+    computerScore++; }
 }
-}
-// playRound(getHumanChoice(), getComputerChoice());
 
 function playGame() {
+    humanScore = 0;
+    computerScore = 0;
     for (let i = 0; i < 5; i++){
-    playRound(getHumanChoice(), getComputerChoice());
+        let humanChoice = getHumanChoice();
+        let computerChoice = getComputerChoice();
+        if (humanChoice === null) {
+            console.log("Game canceled.");
+            alert("Game canceled.");
+            return; }// Exit the game if the user cancels
+        playRound(humanChoice, computerChoice);
     }
     console.log(`Scores - You: ${humanScore}, Computer: ${computerScore}`);
     if (humanScore > computerScore) {
-        console.log(`Congratulations! You won the gave with ascore of ${humanScore} to ${computerScore}`)
-        alert(`Congratulations! You won the gave with ascore of ${humanScore} to ${computerScore}`)
+        console.log(`Congratulations! You won the game with ascore of ${humanScore} to ${computerScore}`)
+        alert(`Congratulations! You won the game with ascore of ${humanScore} to ${computerScore}`)
     }else if (computerScore > humanScore) {
-        console.log(`Congratulations! You won the gave with ascore of ${computerScore} to ${humanScore}`)
-        alert(`Congratulations! You won the gave with ascore of ${computerScore} to ${humanScore}`)
+        console.log(`Congratulations! You lost with a score of ${computerScore} to ${humanScore}`)
+        alert(`Congratulations! You lost with a score of ${computerScore} to ${humanScore}`)
     } else {
         console.log(`The game ended in a tie with both at ${humanScore}`)
         alert(`The game ended in a tie with both at ${humanScore}`)
     }
 }
+
 playGame();
