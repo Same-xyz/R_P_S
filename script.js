@@ -18,6 +18,7 @@ function capitalize(str){
         console.log(`You chose: ${capitalize(humanChoice)}`);
         return humanChoice;
     } else{
+        alert("Invalid choice. Please chose between Rock, Paper, or Scissors. ");
         console.log("Invalid choice. Please chose between Rock, Paper, or Scissors. ");
         return getHumanChoice();
     }
