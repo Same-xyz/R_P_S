@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Index</title>
-    <script src="main.js"></script>
+    <script src="main.js" defer></script>
+    <!-- <script src="dom.js" defer></script> -->
 </head>
     <link rel="stylesheet" href="styles.css">
 <body>
@@ -36,10 +37,12 @@
         </div>
         
         <div class="scoreBoard">
-            <h2>Scoreboard</h2>
-            <p class="tieScore">Tie: 0</p>
-            <p class="humanScore">You: 0</p>
-            <p class="computerScore">Computer: 0</p>
+            <h2>Scoreboard<span> </span></h2>
+            <div class="contScore">
+                <p class="tieScore">Tie:<span> </span></p>
+                <p class="humanScore">You:<span> </span></p>
+                <p class="computerScore">Computer:<span></span></p>
+            </div>
         </div>
     </div>
 </body>
