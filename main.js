@@ -1,36 +1,19 @@
+//Gets Computer Choice
 function getComputerChoice() {
     const random = Math.floor(Math.random() * 3); // Generates a number between 0 and 2
     return random === 0 ? "rock" : random === 1 ? "paper" : "scissors";
 }
 
+//Captitalizes the first letter
 function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
-}
-
-function getHumanChoice() {
-    let humanChoice = prompt("Enter Rock, Paper, or Scissors?");
-    if (humanChoice === null) {
-        console.log("Prompt canceled. Exiting the game.");
-        return null; // Handle this null case in the game logic to exit
-    }
-
-    humanChoice = humanChoice.toLowerCase();
-
-    if (humanChoice === "rock" || humanChoice === "paper" || humanChoice === "scissors") {
-        console.log(`You chose: ${capitalize(humanChoice)}`);
-        return humanChoice;
-
-    } else {
-        alert("Invalid choice. Please choose between Rock, Paper, or Scissors.");
-        console.log("Invalid choice. Please choose between Rock, Paper, or Scissors.");
-        return getHumanChoice();
-    }
 }
 
 let humanScore = 0;
 let computerScore = 0;
 let tieScore = 0;
 
+// Runs a single round
 function playRound(humanChoice, computerChoice) {
     const isDraw = humanChoice === computerChoice;
     const playerWins = (
@@ -39,32 +22,57 @@ function playRound(humanChoice, computerChoice) {
         (humanChoice === "scissors" && computerChoice === "paper")
     );
 
-    if (isDraw) {
-        alert("It's a tie");
-        tieScore++
-    } else if (playerWins) {
-        alert(`You win! ${capitalize(humanChoice)} beats ${capitalize(computerChoice)}.`);
-        humanScore++;
-    } else {
-        alert(`You lose! ${capitalize(computerChoice)} beats ${capitalize(humanChoice)}.`);
-        computerScore++;
+    //Update Scores
+    isDraw
+    ? console.log("It's a tie") || tieScore++
+    : playerWins
+        ? console.log(`You win! ${capitalize(humanChoice)} beats ${capitalize(computerChoice)}.`) || humanScore++
+        : console.log(`You lose! ${capitalize(computerChoice)} beats ${capitalize(humanChoice)}.`) || computerScore++;
+    updateScores();
+}
+
+// Checks if winning conditons are met
+function checkGameOver() {
+    if (humanScore === 5 || computerScore === 5) {
+        const winner = humanScore === 5 ? "Player" : "Computer";
+        alert(`Game Over! The ${winner} wins with a score of ${humanScore} to ${computerScore}.`);
+        // Reset scores after game over
+        humanScore = 0;
+        computerScore = 0;
+        tieScore = 0;
+        updateScores();
     }
 }
 
-function playGame() {
-    while (humanScore < 5 && computerScore < 5) {
-        const playerChoice = getHumanChoice();
-        if (playerChoice === null) {
-            alert("Game canceled.");
-            return;
-        }
+// Domjs
+
+const paper = document.querySelector("#paper");
+const rock = document.querySelector("#rock");
+const scissors = document.querySelector("#scissors");
+
+const playBoard = document.querySelectorAll(".playerBoard img")
+
+playBoard.forEach(img => {
+    img.addEventListener("click", (e)=>{
+        const humanChoice = e.target.id;
         const computerChoice = getComputerChoice();
-        playRound(playerChoice, computerChoice);
+        console.log(`You chose: ${humanChoice}, computer chose: ${computerChoice}`);
+        playRound(humanChoice, computerChoice);
         console.log(`Scores -> You: ${humanScore}, Computer: ${computerScore}`);
-    }
+        checkGameOver();
+    })
+    
+});
 
-    const winner = humanScore === 5 ? "Player" : "Computer";
-    alert(`Game Over! The ${winner} wins with a score of ${humanScore} to ${computerScore}.`);
+function updateScores(){
+    document.querySelector(".humanScore span").textContent = humanScore;
+    document.querySelector(".computerScore span").textContent = computerScore;
+    document.querySelector(".tieScore span").textContent = tieScore;
 }
 
-playGame();
+img.addEventListener("click", (e) => {
+    const humanChoice = e.target;
+    humanChoice.classList.add("selected");
+    setTimeout(() => humanChoice.classList.remove("selected"), 500);
+});
+
