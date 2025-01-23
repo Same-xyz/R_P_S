@@ -23,19 +23,27 @@ function playRound(humanChoice, computerChoice) {
     );
 
     //Update Scores
-    isDraw
-    ? console.log("It's a tie") || tieScore++
-    : playerWins
-        ? console.log(`You win! ${capitalize(humanChoice)} beats ${capitalize(computerChoice)}.`) || humanScore++
-        : console.log(`You lose! ${capitalize(computerChoice)} beats ${capitalize(humanChoice)}.`) || computerScore++;
-    updateScores();
+    const ResultMessage = isDraw
+        ? (tieScore++, "It's a tie")
+        : playerWins
+        ? (humanScore++, `You win! ${capitalize(humanChoice)} beats ${capitalize(computerChoice)}.`)
+        : (computerScore++, `You lose! ${capitalize(computerChoice)} beats ${capitalize(humanChoice)}.`);
+        updateScores();
+        console.log (ResultMessage);
+
+    const resultDisplay = document.querySelector(".scoreBoard .score span");
+    if (humanScore === 5 || computerScore === 5) {
+        resultDisplay.textContent = `Game Over! The ${humanScore === 5 ? "Player" : "Computer"} wins with a score of ${humanScore} to ${computerScore}.`;
+    }
+    else {
+        resultDisplay.textContent = `Score: ${ResultMessage}`;
+}
 }
 
-// Checks if winning conditons are met
-function checkGameOver() {
+    function checkGameOver() {
     if (humanScore === 5 || computerScore === 5) {
         const winner = humanScore === 5 ? "Player" : "Computer";
-        alert(`Game Over! The ${winner} wins with a score of ${humanScore} to ${computerScore}.`);
+        console.log(`Game Over! The ${winner} wins with a score of ${humanScore} to ${computerScore}.`);
         // Reset scores after game over
         humanScore = 0;
         computerScore = 0;
@@ -44,24 +52,36 @@ function checkGameOver() {
     }
 }
 
+const computerImage = document.querySelector("#compImage")
+// Shows Computer Choice
+function showCompChoice(choice){
+    computerImage.src = `images/${choice}-svgrepo-com.svg`;
+    computerImage.classList.add("animate");
+    setTimeout(() => {
+        computerImage.src = "images/computer-virus-1-svgrepo-com.svg"
+        computerImage.classList.remove("animate");
+    }, 1000);
+
+}
+
 // Domjs
-
-const paper = document.querySelector("#paper");
-const rock = document.querySelector("#rock");
-const scissors = document.querySelector("#scissors");
-
 const playBoard = document.querySelectorAll(".playerBoard img")
-
 playBoard.forEach(img => {
     img.addEventListener("click", (e)=>{
+        const humanChoiceElement = e.target;
+        humanChoiceElement.classList.add("selected");
+        setTimeout(() => humanChoiceElement.classList.remove("selected"), 500);
+
         const humanChoice = e.target.id;
         const computerChoice = getComputerChoice();
+
+        showCompChoice(computerChoice);
         console.log(`You chose: ${humanChoice}, computer chose: ${computerChoice}`);
         playRound(humanChoice, computerChoice);
         console.log(`Scores -> You: ${humanScore}, Computer: ${computerScore}`);
         checkGameOver();
     })
-    
+
 });
 
 function updateScores(){
@@ -69,10 +89,4 @@ function updateScores(){
     document.querySelector(".computerScore span").textContent = computerScore;
     document.querySelector(".tieScore span").textContent = tieScore;
 }
-
-img.addEventListener("click", (e) => {
-    const humanChoice = e.target;
-    humanChoice.classList.add("selected");
-    setTimeout(() => humanChoice.classList.remove("selected"), 500);
-});
 
