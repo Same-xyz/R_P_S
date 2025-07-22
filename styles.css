@@ -43,6 +43,7 @@ h1 {
 
 /* Main Board Styling */
 .mainBoard {
+    padding: 10px;
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
